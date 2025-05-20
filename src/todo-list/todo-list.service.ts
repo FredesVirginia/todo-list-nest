@@ -3,6 +3,7 @@ import {
   HttpStatus,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TodoList } from './entity/todo.entity';
@@ -32,5 +33,45 @@ export class TodoListService {
 
       throw new InternalServerErrorException('Error interno del servidor');
     }
+  }
+
+  async getAllTodoList() {
+    try {
+      const allTodoList = await this.todoListRepository.find();
+      return allTodoList;
+    } catch (error) {
+      throw new RpcException({
+        HttpStatus: HttpStatus.BAD_REQUEST,
+      });
+    }
+  }
+
+  async getIdTodoList(id:string){
+    const todoListId = await this.todoListRepository.findOneBy({id})
+    if(!todoListId){
+      throw new NotFoundException("Tarea no encontrada")
+    }
+    return {
+      status : HttpStatus.ACCEPTED,
+      data : todoListId
+    }
+  }
+
+  async deleteTodoList(id: string) {
+    const todoList = await this.todoListRepository.findOneBy({ id });
+    if (!todoList) {
+      throw new NotFoundException('Tarea no encontrada');
+    }
+
+    const data = await this.todoListRepository.remove(todoList);
+    return {
+      status: HttpStatus.ACCEPTED,
+      data,
+    };
+  }
+
+
+  async lookForTodoListByKeyWord( word : string){
+    
   }
 }
