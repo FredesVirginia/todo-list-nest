@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TodoList } from './entity/todo.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CreateTodoListDto } from './dto/User-created.dto';
 import { RpcException } from '@nestjs/microservices';
 
@@ -72,6 +72,18 @@ export class TodoListService {
 
 
   async lookForTodoListByKeyWord( word : string){
-    
+    const todoList = await this.todoListRepository.find({
+      where : [
+        {title : ILike(`%${word}%`)},
+        {description : ILike(`%${word}%`)},
+        {content : ILike(`%${word}%`)}
+      ]
+    })
+
+     if(!todoList){
+      throw new NotFoundException(`No se encontraron tareas con la palabra clave ${word}`)
+     }
+
+     return todoList
   }
 }

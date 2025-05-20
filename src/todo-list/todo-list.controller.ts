@@ -29,4 +29,9 @@ export class TodoListController {
     async deleteTodoList(@Param('id' , new ParseUUIDPipe()) id:string){
         return this.todoListServices.deleteTodoList(id)
     }
+
+    @Post('search-todo-list-by-keyword')
+    async searchTodoListByKeyword(@Body('word') word : string){
+        return this.todoListServices.lookForTodoListByKeyWord(word)
+    }
 }
