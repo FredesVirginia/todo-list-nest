@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, ParseUUIDPipe, Post } from '@nestjs/common';
 import { TodoListService } from './todo-list.service';
-import { CreateTodoListDto } from './dto/User-created.dto';
+import { CreateTodoListDto, SearTodoListByKeyword } from './dto/User-created.dto';
 import { Payload } from '@nestjs/microservices';
 
 @Controller('todo-list')
@@ -31,7 +31,7 @@ export class TodoListController {
     }
 
     @Post('search-todo-list-by-keyword')
-    async searchTodoListByKeyword(@Body('word') word : string){
-        return this.todoListServices.lookForTodoListByKeyWord(word)
+    async searchTodoListByKeyword(@Body() dto : SearTodoListByKeyword){
+        return this.todoListServices.lookForTodoListByKeyWord(dto.word)
     }
 }

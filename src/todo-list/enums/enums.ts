@@ -4,3 +4,10 @@ export enum TodoListState {
     INITIATED="INITIATED",
     WINING="WINNING",
 }
+
+
+export enum TodoListTitleNotAdmited{
+    TEST="test",
+    DEFAULT="default",
+    PRUEBA="prueba"
+}
